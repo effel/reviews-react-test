@@ -1,5 +1,6 @@
  
 import React from 'react';
+
 import {store, getData} from '../redux/store';
 
 import './App.scss';

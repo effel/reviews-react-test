@@ -1,5 +1,7 @@
+
+import connection from '../redux/ws-api'
 import { createStore } from 'redux'
-import { something } from '../redux/ws-api'
+
 
 let getData = (data) => {
     return {
@@ -14,9 +16,7 @@ let dataReducer = (state, action) => {
     state = [];
   }
   if (action.type === 'GET_DATA') {
-    //connection.send("Tanya");
-      console.log(something);
-      console.log(action.data);
+    setTimeout(() => { connection.send(action.data)}, 0);
   }
   return state;
 }
