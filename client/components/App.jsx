@@ -1,31 +1,33 @@
  
 import React from 'react';
 import {connect} from 'react-redux'
-import {store, getData, setData} from '../redux/store';
+import connection from '../redux/ws-api'
+import {store, setData} from '../redux/store';
 
 import './App.scss';
 
-export default class App extends React.Component {
+class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-       inputVal : '',
+       inputVal : store.item,
        Text: 'default'
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.changeValue = this.changeValue.bind(this);    
+    this.changeValue = this.changeValue.bind(this);
   }  
 
   handleInputChange() {
-  
-    store.dispatch(getData(this.state.inputVal)); 
-    store.dispatch(setData());    
+  	setTimeout(() => { connection.send(this.state.inputVal)}, 0);
+    store.dispatch(setData(this.state.inputVal));		
   }
   
   changeValue(event) {
      var value = event.target.value;
-  
+	  this.setState({
+        inputVal: value
+      });
   }
 
   render() {
@@ -34,7 +36,18 @@ export default class App extends React.Component {
         <h1>Hello Tanya</h1>
         <input type="text" defaultValue={this.state.inputVal} onBlur = {this.changeValue}/>
         <button onClick={this.handleInputChange}>Send</button>
-        <p>{this.state.Text}</p>
+        <p>{this.props.item}</p>
+        <p>{this.props.dataArrayMaps}</p>		
       </div>);
   }
 }
+
+const mapStateToProps = (state) => {
+	const dataArrayMaps = state.dataArr || [];
+	return {
+		dataArrayMaps,
+		item: state.item
+	}
+}
+
+export default connect(mapStateToProps)(App)
