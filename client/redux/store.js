@@ -1,13 +1,6 @@
 import { createStore } from 'redux'
 import connection from '../redux/ws-api'
 
-let setData = (data) => {
-    return {
-      type: 'SET_DATA',
-	  data
-    }
-};
-
 let dataReducer = (state = {}, action) => {
 
   if (action.type === 'SET_DATA') {
@@ -29,4 +22,4 @@ let dataReducer = (state = {}, action) => {
 
 let store = createStore(dataReducer);
 
-export {store, setData};
+export {store};

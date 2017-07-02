@@ -2,7 +2,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import connection from '../redux/ws-api'
-import {store, setData} from '../redux/store';
 
 import './App.scss';
 
@@ -11,7 +10,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       inputVal : store.item,
+       inputVal : this.props.item,
        Text: 'default'
     };
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -20,7 +19,7 @@ class App extends React.Component {
 
   handleInputChange() {
   	setTimeout(() => { connection.send(this.state.inputVal)}, 0);
-    store.dispatch(setData(this.state.inputVal));		
+    this.props.setData(this.state.inputVal);		
   }
   
   changeValue(event) {
@@ -50,4 +49,12 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(App)
+const mapDispatchToProps = function(dispatch) {
+  return {
+        setData: (data) => {
+            dispatch({type: "SAVE_DATA", data: data});
+        }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
