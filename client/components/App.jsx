@@ -24,7 +24,12 @@ class App extends React.Component {
        repo: [],
        dropdownShow: false       
     };
+    this.handlePaging = this.handlePaging.bind(this);
   }  
+
+  handlePaging() {
+    alert("@");
+  }
 
   componentDidMount() {
       var that = this;
@@ -54,9 +59,7 @@ class App extends React.Component {
       //    return  x;
       // });
 
-      var doubles3 = this.state.repo.map(function(x) {
-         return  x.traveledWith;
-      });
+
 
       // const sorted = doubles2.sort((date1, date2) => {
       //   return date1.entryDate - date2.entryDate;
@@ -73,11 +76,17 @@ class App extends React.Component {
       //    return  x;
       // });  
 
-      let unique = [...new Set(doubles3)]; 
+     var traveledWithArr = this.state.repo.map(function(x) {
+        return  x.traveledWith;
+     });
+     let unique = [...new Set(traveledWithArr)]; 
 
-     let arr = pagination(0, 9, this.state.repo);
+     const dropDownTravelWithItems = unique.map((itemName, index ) =>
+        <li key={index} ><a href="#">{itemName}</a></li>
+     );  
 
-     const listItems = arr.map((number, index ) =>
+     let itemsWithPaging = pagination(0, 9, this.state.repo);
+     const listItems = itemsWithPaging.map((number, index ) =>
         <div key={index} className="row">
           <div  className="col-sm-12">
                <hr />          
@@ -99,27 +108,24 @@ class App extends React.Component {
           <div  className="col-sm-6">
                <div className="dropdown">
                   <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    Filter Travel With
-                    <span className="caret" />
+                    Filter Travel With <span className="caret"></span>
                   </button>
-                  <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" className="divider" />
-                    <li><a href="#">Separated link</a></li>
-                  </ul>
+                  <ul className="dropdown-menu visible" aria-labelledby="dropdownMenu1"  >                  
+                   {dropDownTravelWithItems}
+                  </ul>                  
                 </div>
           </div>
           <div  className="col-sm-6">
             <div className="btn-group pull-right">
-              <button type="button" className="btn btn-default">Sorting Travel date</button>
-              <button type="button" className="btn btn-default">Sorting Review date</button>
+              <button type="button" className="btn btn-primary btn-sm">Sorting Travel date</button>
+              <button type="button" className="btn btn-primary btn-sm">Sorting Review date</button>
             </div>
           </div>          
         </div> 
 
         {listItems}
+
+        <button type="button" className="btn btn-primary btn-sm"  onClick={this.handlePaging}>Paging</button>
 
       </div>
     );
