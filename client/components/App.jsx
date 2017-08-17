@@ -21,7 +21,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       repo: []
+       repo: [],
+       dropdownShow: false       
     };
   }  
 
@@ -79,12 +80,12 @@ class App extends React.Component {
      const listItems = arr.map((number, index ) =>
         <div key={index} className="row">
           <div  className="col-sm-12">
+               <hr />          
                <label className="text-primary"><small>Id: </small></label> <span>{number.id} </span>         
                <label className="text-primary"><small>Travel with: </small></label> <span>{number.traveledWith} </span>
                <label className="text-primary"><small>General rating: </small></label> <span>{number.ratings.general.general} </span>  
                <label className="text-primary"><small>Travel date: </small></label> <span>{number.travelDate} </span>                 
                <label className="text-primary"><small>Review date: </small></label> <span>{number.entryDate} </span>     
-               <hr />
           </div>
         </div>   
      );   
@@ -94,8 +95,8 @@ class App extends React.Component {
   
         <ShowAverage />
 
-        <div className="row mb-4">
-          <div  className="col-sm-12">
+        <div className="row">
+          <div  className="col-sm-6">
                <div className="dropdown">
                   <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     Filter Travel With
@@ -110,6 +111,12 @@ class App extends React.Component {
                   </ul>
                 </div>
           </div>
+          <div  className="col-sm-6">
+            <div className="btn-group pull-right">
+              <button type="button" className="btn btn-default">Sorting Travel date</button>
+              <button type="button" className="btn btn-default">Sorting Review date</button>
+            </div>
+          </div>          
         </div> 
 
         {listItems}
@@ -121,10 +128,3 @@ class App extends React.Component {
 
 export default App;
 
-function getHtmlFromObj(obj) {
-  let teml = '';
-  for (var key in obj) {
-    teml += `<small><span class="text-info">Average of the ${key}:</span> ${obj[key]};</small> `;
-  }
-  return {__html: teml};
-}

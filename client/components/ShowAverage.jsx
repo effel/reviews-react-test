@@ -39,7 +39,6 @@ class ShowAverage extends React.Component {
   render() {
 
     return (
-      <div className="container">
         <div className="jumbotron">
 
           <div className="row">
@@ -61,7 +60,6 @@ class ShowAverage extends React.Component {
           </div>            
         </div>      
 
-      </div>
     );
   }
 }
