@@ -5,8 +5,8 @@ import ShowAverage from './ShowAverage.jsx';
 
 import './App.scss';
 
-function filterArray(arrToFilter, itemToCompare, prop) {
- arrToFilter.filter(function(elem){
+function filterArray(arrToFilter, itemToCompare,prop) {
+ return arrToFilter.filter(function(elem){
     return elem[prop] === itemToCompare;
  });
 }
@@ -22,14 +22,52 @@ class App extends React.Component {
     super(props);
     this.state = {
        repo: [],
-       dropdownShow: false       
+       repoStatic: [],
+       dropdownShow: '',
+       filterArr: []      
     };
-    this.handlePaging = this.handlePaging.bind(this);
+    this.handlePaging = this.handlePaging.bind(this); 
+    this.filteringItems = this.filteringItems.bind(this);     
+    this.showHideDropDown = this.showHideDropDown.bind(this);     
+    this.sortingData = this.sortingData.bind(this);      
   }  
 
-  handlePaging() {
-    alert("@");
-  }
+
+    handlePaging() {
+      let something = pagination(0, 4, this.state.repo);
+            this.setState({
+                repo: something
+            });      
+    
+    }  
+ 
+    showHideDropDown() {
+
+      if (this.state.dropdownShow.length === 0) {
+            this.setState({
+                dropdownShow: 'visible'
+            });              
+      } else {
+            this.setState({
+                dropdownShow: ''
+            });                 
+      }
+          
+    }  
+
+    filteringItems(event) {
+     let targetText = event.target.innerHTML;
+     let something = [];
+      this.setState({
+          repo: filterArray(this.state.repoStatic, targetText,'traveledWith'),
+          dropdownShow: ''
+      });        
+    }  
+
+    sortingData(event) {
+     let targetText = event.target.innerHTML;
+             
+    }     
 
   componentDidMount() {
       var that = this;
@@ -39,14 +77,17 @@ class App extends React.Component {
           response.json().then(function(data) {  
             
             that.setState({
-                repo: data
+                repo: data,
+                repoStatic: data
             });  
+
           });  
         }  
       )  
       .catch(function(err) {  
         console.log('Fetch Error :-S', err);  
       });
+   
 
   }
 
@@ -70,23 +111,23 @@ class App extends React.Component {
       //   return date1.travelDate - date2.travelDate;
       // })
 
-      // var doubles2 = this.state.repo.map(function(x) {
-      //   x.entryDate = (dateFormat(x.entryDate,"dd/mm/yyyy")).toString();
-      //   x.travelDate = (dateFormat(x.travelDate,"dd/mm/yyyy")).toString();
-      //    return  x;
-      // });  
+      this.state.repo.forEach(function(elem) {
+        elem.entryDate = (dateFormat(elem.entryDate,"dd/mm/yyyy")).toString();
+        elem.travelDate = (dateFormat(elem.travelDate,"dd/mm/yyyy")).toString();
+        return  elem;
+      });  
 
-     var traveledWithArr = this.state.repo.map(function(x) {
+     var traveledWithArr = this.state.repoStatic.map(function(x) {
         return  x.traveledWith;
      });
-     let unique = [...new Set(traveledWithArr)]; 
+
+     let unique = [...new Set(traveledWithArr)];
 
      const dropDownTravelWithItems = unique.map((itemName, index ) =>
-        <li key={index} ><a href="#">{itemName}</a></li>
+        <li key={index} ><a href="#" onClick={this.filteringItems}>{itemName}</a></li>
      );  
 
-     let itemsWithPaging = pagination(0, 9, this.state.repo);
-     const listItems = itemsWithPaging.map((number, index ) =>
+     const listItems = this.state.repo.map((number, index ) =>
         <div key={index} className="row">
           <div  className="col-sm-12">
                <hr />          
@@ -98,6 +139,8 @@ class App extends React.Component {
           </div>
         </div>   
      );   
+     
+    let that = this;
 
     return (
       <div className="container">
@@ -107,25 +150,25 @@ class App extends React.Component {
         <div className="row">
           <div  className="col-sm-6">
                <div className="dropdown">
-                  <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                  <button className= "btn btn-default dropdown-toggle" type="button" onClick={this.showHideDropDown}>
                     Filter Travel With <span className="caret"></span>
                   </button>
-                  <ul className="dropdown-menu visible" aria-labelledby="dropdownMenu1"  >                  
+                  <ul className={'dropdown-menu ' + this.state.dropdownShow} aria-labelledby="dropdownMenu1"  >                  
                    {dropDownTravelWithItems}
                   </ul>                  
                 </div>
           </div>
           <div  className="col-sm-6">
             <div className="btn-group pull-right">
-              <button type="button" className="btn btn-primary btn-sm">Sorting Travel date</button>
+              <button type="button" className="btn btn-primary btn-sm" onClick={this.sortingData}>Sorting Travel date</button>
               <button type="button" className="btn btn-primary btn-sm">Sorting Review date</button>
             </div>
           </div>          
         </div> 
-
+        <button type="button" className="btn btn-primary btn-sm"  onClick={this.handlePaging}>Paging</button>
         {listItems}
 
-        <button type="button" className="btn btn-primary btn-sm"  onClick={this.handlePaging}>Paging</button>
+
 
       </div>
     );
