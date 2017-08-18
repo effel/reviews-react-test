@@ -5,6 +5,8 @@ import ShowAverage from './ShowAverage.jsx';
 
 import './App.scss';
 
+const itemPagedNumber = 10;
+
 function filterArray(arrToFilter, itemToCompare,prop) {
  return arrToFilter.filter(function(elem){
     return elem[prop] === itemToCompare;
@@ -34,7 +36,7 @@ class App extends React.Component {
 
 
     handlePaging() {
-      let something = pagination(0, 4, this.state.repo);
+      let something = pagination(0, itemPagedNumber, this.state.repoStatic);
             this.setState({
                 repo: something
             });      
@@ -42,7 +44,6 @@ class App extends React.Component {
     }  
  
     showHideDropDown() {
-
       if (this.state.dropdownShow.length === 0) {
             this.setState({
                 dropdownShow: 'visible'
@@ -57,7 +58,6 @@ class App extends React.Component {
 
     filteringItems(event) {
      let targetText = event.target.innerHTML;
-     let something = [];
       this.setState({
           repo: filterArray(this.state.repoStatic, targetText,'traveledWith'),
           dropdownShow: ''
@@ -65,9 +65,31 @@ class App extends React.Component {
     }  
 
     sortingData(event) {
-     let targetText = event.target.innerHTML;
-             
-    }     
+     let arr = this.state.repoStatic; 
+     let targetAttrDate = event.target.getAttribute('data-sort');
+     let prop = targetAttrDate==='travelDate' ? 'travelDate' : 'entryDate';
+
+     arr.forEach(function(x) {
+        x.entryDate = new Date(x.entryDate);
+        x.travelDate = new Date(x.travelDate);   
+        return  x;
+      });  
+
+      arr.sort((date1, date2) => {
+        return date1[prop] - date2[prop];
+      })      
+
+     arr.forEach(function(x) {
+        x.entryDate = x.entryDate.toString();
+        x.travelDate =x.travelDate.toString();   
+        return  x;
+      });       
+
+      this.setState({
+          repo: arr
+      });        
+
+     }
 
   componentDidMount() {
       var that = this;
@@ -93,28 +115,18 @@ class App extends React.Component {
 
   render() {
 
-      // var doubles2 = this.state.repo.map(function(x) {
-      //   x.entryDate = new Date(x.entryDate);
-      //   x.travelDate = new Date(x.travelDate);   
 
-      //    return  x;
-      // });
+      // this.state.repo.forEach(function(elem) {
+      //   elem.entryDate = (dateFormat(elem.entryDate,"dd/mm/yyyy")).toString();
+      //   elem.travelDate = (dateFormat(elem.travelDate,"dd/mm/yyyy")).toString();
+      //   return  elem;
+      // });  
 
+     this.state.repo.forEach(function(x) {
+        x.entryDate = new Date(x.entryDate).toString();
+        x.travelDate = new Date(x.travelDate).toString();   
 
-
-      // const sorted = doubles2.sort((date1, date2) => {
-      //   return date1.entryDate - date2.entryDate;
-      // })
-      //   console.log(sorted)
-
-      // const sorted2 = doubles2.sort((date1, date2) => {
-      //   return date1.travelDate - date2.travelDate;
-      // })
-
-      this.state.repo.forEach(function(elem) {
-        elem.entryDate = (dateFormat(elem.entryDate,"dd/mm/yyyy")).toString();
-        elem.travelDate = (dateFormat(elem.travelDate,"dd/mm/yyyy")).toString();
-        return  elem;
+         return  x;
       });  
 
      var traveledWithArr = this.state.repoStatic.map(function(x) {
@@ -160,8 +172,8 @@ class App extends React.Component {
           </div>
           <div  className="col-sm-6">
             <div className="btn-group pull-right">
-              <button type="button" className="btn btn-primary btn-sm" onClick={this.sortingData}>Sorting Travel date</button>
-              <button type="button" className="btn btn-primary btn-sm">Sorting Review date</button>
+              <button type="button" className="btn btn-primary btn-sm"  data-sort='travelDate' onClick={this.sortingData}>Sorting Travel date</button>
+              <button type="button" className="btn btn-primary btn-sm"  data-sort='reviewDate' onClick={this.sortingData}>Sorting Review date</button>
             </div>
           </div>          
         </div> 
