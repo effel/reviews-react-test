@@ -26,10 +26,12 @@ class App extends React.Component {
        repo: [],
        repoStatic: [],
        dropdownShow: '',
-       filterArr: []      
+       filterArr: [],
+       filterLabel:  ''    
     };
     this.handlePaging = this.handlePaging.bind(this); 
     this.filteringItems = this.filteringItems.bind(this);     
+    this.clearFilter = this.clearFilter.bind(this);     
     this.showHideDropDown = this.showHideDropDown.bind(this);     
     this.sortingData = this.sortingData.bind(this);      
   }  
@@ -60,7 +62,16 @@ class App extends React.Component {
      let targetText = event.target.innerHTML;
       this.setState({
           repo: filterArray(this.state.repoStatic, targetText,'traveledWith'),
-          dropdownShow: ''
+          dropdownShow: '',
+          filterLabel: targetText
+      });        
+    }  
+
+    clearFilter(event) {
+      this.setState({
+          repo: this.state.repoStatic,
+          dropdownShow: '',
+          filterLabel: ''
       });        
     }  
 
@@ -69,7 +80,7 @@ class App extends React.Component {
      let targetAttrDate = event.target.getAttribute('data-sort');
      let prop = targetAttrDate==='travelDate' ? 'travelDate' : 'entryDate';
 
-     arr.forEach(function(x) {
+     arr.forEach((x) => {
         x.entryDate = new Date(x.entryDate);
         x.travelDate = new Date(x.travelDate);   
         return  x;
@@ -79,7 +90,7 @@ class App extends React.Component {
         return date1[prop] - date2[prop];
       })      
 
-     arr.forEach(function(x) {
+     arr.forEach((x) => {
         x.entryDate = x.entryDate.toString();
         x.travelDate =x.travelDate.toString();   
         return  x;
@@ -160,27 +171,29 @@ class App extends React.Component {
         <ShowAverage />
 
         <div className="row">
-          <div  className="col-sm-6">
-               <div className="dropdown">
+          <div  className="col-sm-4">
+               <div className="dropdown pull-left filter-drop">
                   <button className= "btn btn-default dropdown-toggle" type="button" onClick={this.showHideDropDown}>
-                    Filter Travel With <span className="caret"></span>
+                    Filter Travel With {this.state.filterLabel} <span className="caret"></span>
                   </button>
                   <ul className={'dropdown-menu ' + this.state.dropdownShow} aria-labelledby="dropdownMenu1"  >                  
                    {dropDownTravelWithItems}
                   </ul>                  
                 </div>
+              <button type="button" className="btn btn-danger btn-sm" onClick={this.clearFilter}>Clear Filter</button>                
           </div>
-          <div  className="col-sm-6">
+          <div  className="col-sm-4 text-center">        
+            <button type="button" className="btn btn-primary btn-sm"  onClick={this.handlePaging}>Paging</button>
+          </div>  
+          <div  className="col-sm-4">
             <div className="btn-group pull-right">
               <button type="button" className="btn btn-primary btn-sm"  data-sort='travelDate' onClick={this.sortingData}>Sorting Travel date</button>
               <button type="button" className="btn btn-primary btn-sm"  data-sort='reviewDate' onClick={this.sortingData}>Sorting Review date</button>
             </div>
           </div>          
         </div> 
-        <button type="button" className="btn btn-primary btn-sm"  onClick={this.handlePaging}>Paging</button>
+
         {listItems}
-
-
 
       </div>
     );
