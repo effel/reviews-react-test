@@ -90,11 +90,11 @@ class App extends React.Component {
         return date1[prop] - date2[prop];
       })      
 
-     arr.forEach((x) => {
-        x.entryDate = x.entryDate.toString();
-        x.travelDate =x.travelDate.toString();   
-        return  x;
-      });       
+     // arr.forEach((x) => {
+     //    x.entryDate = x.entryDate.getDay() + "/" + x.entryDate.getMonth() + "/" + x.entryDate.getFullYear();
+     //    x.travelDate = x.travelDate.getDay() + "/" + x.travelDate.getMonth() + "/" + x.travelDate.getFullYear();   
+     //    return  x;
+     //  });       
 
       this.setState({
           repo: arr
@@ -126,21 +126,19 @@ class App extends React.Component {
 
   render() {
 
-
-      // this.state.repo.forEach(function(elem) {
-      //   elem.entryDate = (dateFormat(elem.entryDate,"dd/mm/yyyy")).toString();
-      //   elem.travelDate = (dateFormat(elem.travelDate,"dd/mm/yyyy")).toString();
-      //   return  elem;
-      // });  
+     this.state.repo.forEach((x) => {
+        x.entryDate = new Date(x.entryDate);
+        x.travelDate = new Date(x.travelDate);   
+        return  x;
+      });        
 
      this.state.repo.forEach(function(x) {
-        x.entryDate = new Date(x.entryDate).toString();
-        x.travelDate = new Date(x.travelDate).toString();   
-
+        x.entryDate = x.entryDate.getDay() + "/" + x.entryDate.getMonth() + "/" + x.entryDate.getFullYear();
+        x.travelDate = x.travelDate.getDay() + "/" + x.travelDate.getMonth() + "/" + x.travelDate.getFullYear();    
          return  x;
       });  
 
-     var traveledWithArr = this.state.repoStatic.map(function(x) {
+     let traveledWithArr = this.state.repoStatic.map(function(x) {
         return  x.traveledWith;
      });
 
