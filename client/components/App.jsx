@@ -1,6 +1,4 @@
- 
 import React from 'react';
-import dateFormat from 'dateformat';
 import ShowAverage from './ShowAverage.jsx';
 
 import './App.scss';
@@ -19,106 +17,104 @@ function pagination(startPos, endPos, arr) {
 }
 
 class App extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-       repo: [],
-       repoStatic: [],
-       dropdownShow: '',
-       filterArr: [],
-       filterLabel:  '',
-       sortingUp: false   
+        repo: [],
+        repoStatic: [],
+        dropdownShow: '',
+        filterArr: [],
+        filterLabel: '',
+        sortingUp: false
     };
-    this.handlePaging = this.handlePaging.bind(this); 
-    this.filteringItems = this.filteringItems.bind(this);     
-    this.clearFilter = this.clearFilter.bind(this);     
-    this.showHideDropDown = this.showHideDropDown.bind(this);     
-    this.sortingData = this.sortingData.bind(this);      
-  }  
+    this.handlePaging = this.handlePaging.bind(this);
+    this.filteringItems = this.filteringItems.bind(this);
+    this.clearFilter = this.clearFilter.bind(this);
+    this.showHideDropDown = this.showHideDropDown.bind(this);
+    this.sortingData = this.sortingData.bind(this);
+}
 
 
-    handlePaging(event) {
-      let targetText = parseInt(event.target.innerHTML) - 1;   
-      let something = pagination(targetText*itemPagedNumber, (targetText*itemPagedNumber + itemPagedNumber), this.state.repoStatic);
-            this.setState({
-                repo: something
-            });      
-    }  
- 
-    showHideDropDown() {
-      if (this.state.dropdownShow.length === 0) {
-            this.setState({
-                dropdownShow: 'visible'
-            });              
-      } else {
-            this.setState({
-                dropdownShow: ''
-            });                 
-      }
-          
-    }  
+handlePaging(event) {
+    let targetText = parseInt(event.target.innerHTML) - 1;
+    let something = pagination(targetText * itemPagedNumber, (targetText * itemPagedNumber + itemPagedNumber), this.state.repoStatic);
+    this.setState({
+        repo: something
+    });
+}
 
-    filteringItems(event) {
-     let targetText = event.target.innerHTML;
-      this.setState({
-          repo: filterArray(this.state.repoStatic, targetText,'traveledWith'),
-          dropdownShow: '',
-          filterLabel: targetText
-      }); 
-    
-    }  
+showHideDropDown() {
+    if (this.state.dropdownShow.length === 0) {
+        this.setState({
+            dropdownShow: 'visible'
+        });
+    } else {
+        this.setState({
+            dropdownShow: ''
+        });
+    }
 
-    clearFilter(event) {
-      this.setState({
-          repo: this.state.repoStatic,
-          dropdownShow: '',
-          filterLabel: ''
-      });        
-    }  
+}
 
-    sortingData(event) {
-     let arr = this.state.repoStatic; 
-     let targetAttrDate = event.target.getAttribute('data-sort');
-     let prop = targetAttrDate==='travelDate' ? 'travelDate' : 'entryDate';
+filteringItems(event) {
+    let targetText = event.target.innerHTML;
+    this.setState({
+        repo: filterArray(this.state.repoStatic, targetText, 'traveledWith'),
+        dropdownShow: '',
+        filterLabel: targetText
+    });
 
-      arr.sort((date1, date2) => {
+}
+
+clearFilter(event) {
+    this.setState({
+        repo: this.state.repoStatic,
+        dropdownShow: '',
+        filterLabel: ''
+    });
+}
+
+sortingData(event) {
+    let arr = this.state.repoStatic;
+    let targetAttrDate = event.target.getAttribute('data-sort');
+    let prop = targetAttrDate === 'travelDate' ? 'travelDate' : 'entryDate';
+
+    arr.sort((date1, date2) => {
         return date1[prop] - date2[prop];
-      });      
+    });
 
-      if (!this.state.sortingUp) {
+    if (!this.state.sortingUp) {
         this.setState({
-          repo: arr,
-          sortingUp: true
-        }); 
-      } else {
+            repo: arr,
+            sortingUp: true
+        });
+    } else {
         this.setState({
-          repo: arr.reverse(),
-          sortingUp: false
-        }); 
-      }
-     }
+            repo: arr.reverse(),
+            sortingUp: false
+        });
+    }
+}
 
-  componentDidMount() { 
-      fetch("http://localhost:3000/reviews")
-      .then( (response) => {  
-          response.json().then((data) => {    
-            data.forEach((elem, index) => {
-              elem.order = index + 1;
-              return  elem;
-            });                     
-            this.setState({
-                repo: data,
-                repoStatic: data
-            });  
-          });  
-        }  
-      )  
-      .catch(function(err) {  
-        console.log('Fetch Error :-S', err);  
-      });
+componentDidMount() {
+    fetch("http://localhost:3000/reviews")
+        .then((response) => {
+            response.json().then((data) => {
+                data.forEach((elem, index) => {
+                    elem.order = index + 1;
+                    return elem;
+                });
+                this.setState({
+                    repo: data,
+                    repoStatic: data
+                });
+            });
+        })
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+        });
 
-  }
+}
 
   render() {
     
@@ -147,7 +143,8 @@ class App extends React.Component {
                <label className="text-primary"><small>Travel with: </small></label> <span>{number.traveledWith} </span>
                <label className="text-primary"><small>General rating: </small></label> <span>{number.ratings.general.general} </span>  
                <label className="text-primary"><small>Travel date: </small></label> <span>{number.travelDate.getDay() + "/" + number.travelDate.getMonth() + "/" + number.travelDate.getFullYear()} </span>                 
-               <label className="text-primary"><small>Review date: </small></label> <span>{number.entryDate.getDay() + "/" + number.entryDate.getMonth() + "/" + number.entryDate.getFullYear()} </span>     
+               <label className="text-primary"><small>Review date: </small></label> <span>{number.entryDate.getDay() + "/" + number.entryDate.getMonth() + "/" + number.entryDate.getFullYear()} </span>  
+               <button type="button" className="btn btn-info btn-sm pull-right" >Details</button>  
           </div>
         </div>   
      );  
@@ -161,47 +158,42 @@ class App extends React.Component {
 
     return (
       <div className="container">
-  
         <ShowAverage />
-
         <div className="row">
-          <div  className="col-sm-4">
-               <div className="dropdown pull-left filter-drop">
+            <div  className="col-sm-4">
+              <div className="dropdown pull-left filter-drop">
                   <button className= "btn btn-default dropdown-toggle" type="button" onClick={this.showHideDropDown}>
-                    Filter Travel With {this.state.filterLabel} <span className="caret"></span>
+                  Filter Travel With {this.state.filterLabel} <span className="caret"></span>
                   </button>
                   <ul className={'dropdown-menu ' + this.state.dropdownShow} aria-labelledby="dropdownMenu1"  >                  
-                   {dropDownTravelWithItems}
+                  {dropDownTravelWithItems}
                   </ul>                  
-                </div>
+              </div>
               <button type="button" className="btn btn-danger btn-sm" onClick={this.clearFilter}>Clear Filter</button>                
-          </div>
-          <div  className="col-sm-4 text-center">        
-            <nav aria-label="Page navigation">
-              <ul className="pagination">
-                {pagingButtons}
-              </ul>
-            </nav>            
-          </div>  
-          <div  className="col-sm-4">
-          <div className="btn-group pull-right">
-            <button type="button" className="btn btn-info btn-sm  pull-righ">
-            <span className={this.state.sortingUp ? 'glyphicon glyphicon-arrow-up' : 'glyphicon glyphicon-arrow-down'}></span>
-              </button>                
-              <button type="button" className="btn btn-primary btn-sm"  data-sort='travelDate' onClick={this.sortingData}>Sorting Travel date
-              </button>
-              <button type="button" className="btn btn-primary btn-sm"  data-sort='reviewDate' onClick={this.sortingData}>Sorting Review date</button>
-            </div>     
-            
-          </div>          
-        </div> 
-
+            </div>
+            <div  className="col-sm-4 text-center">        
+            </div>
+            <div  className="col-sm-4">
+              <div className="btn-group pull-right">
+                  <button type="button" className="btn btn-info btn-sm  pull-righ">
+                  <span className={this.state.sortingUp ? 'glyphicon glyphicon-arrow-up' : 'glyphicon glyphicon-arrow-down'}></span>
+                  </button>                
+                  <button type="button" className="btn btn-primary btn-sm"  data-sort='travelDate' onClick={this.sortingData}>Sorting Travel date
+                  </button>
+                  <button type="button" className="btn btn-primary btn-sm"  data-sort='reviewDate' onClick={this.sortingData}>Sorting Review date</button>
+              </div>
+            </div>
+        </div>
         {listItems}
-        <nav aria-label="Page navigation">
-              <ul className="pagination">
-                {pagingButtons}
-              </ul>
-            </nav>
+        <div className="row">
+            <div  className="col-sm-12">
+              <nav className="text-center">
+                  <ul className="pagination">
+                    {pagingButtons}
+                  </ul>
+              </nav>
+            </div>
+        </div>
       </div>
     );
   }
