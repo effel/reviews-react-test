@@ -7,7 +7,7 @@ class DetailesPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       ratings: {}
+       item: { titles:{nl: 'hello'} }
     };
   }  
 
@@ -18,7 +18,7 @@ class DetailesPage extends React.Component {
           response.json().then((data) => {  
             
             this.setState({
-                ratings: data
+                item: data
             });  
           });  
         }  
@@ -29,8 +29,15 @@ class DetailesPage extends React.Component {
   }
 
   render() {
+    const shit = this.state.item.titles.nl.toString();
     return (
-       <h1>Detaled Page</h1>    
+      <div className="container">
+        <div className="row">
+          <div  className="col-sm-12">      
+           <h1>{shit}</h1>  
+          </div>
+        </div>     
+      </div>                
     );
   }
 }
