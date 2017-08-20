@@ -2,13 +2,6 @@ const path = require('path');
 
 const webpack = require('webpack');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
-  template: './client/index.html',
-  filename: 'index.html',
-  inject: 'body'
-});
-
 module.exports = {
   entry: './client/index.js',
   output: {
@@ -19,6 +12,9 @@ module.exports = {
     openPage: '',
     open: true,
     port: 9000,
+    historyApiFallback: {
+      index: 'client/index.html'
+    }
   },
     module: {
         rules: [
@@ -34,9 +30,7 @@ module.exports = {
                 use: ['style-loader', 'css-loader',  'sass-loader']
             }
         ]
-    },
-
-  plugins: [HtmlWebpackPluginConfig]
+    }
   
 }
 

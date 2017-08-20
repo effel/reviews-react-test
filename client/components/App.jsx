@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom'
 import ShowAverage from './ShowAverage.jsx';
 
 import './App.scss';
@@ -144,7 +145,7 @@ componentDidMount() {
                <label className="text-primary"><small>General rating: </small></label> <span>{number.ratings.general.general} </span>  
                <label className="text-primary"><small>Travel date: </small></label> <span>{number.travelDate.getDay() + "/" + number.travelDate.getMonth() + "/" + number.travelDate.getFullYear()} </span>                 
                <label className="text-primary"><small>Review date: </small></label> <span>{number.entryDate.getDay() + "/" + number.entryDate.getMonth() + "/" + number.entryDate.getFullYear()} </span>  
-               <button type="button" className="btn btn-info btn-sm pull-right" >Details</button>  
+               <Link to={'/Detailed/' + number.id}  className="btn btn-info btn-sm pull-right" >Details</Link>
           </div>
         </div>   
      );  

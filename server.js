@@ -102,6 +102,15 @@ app.get('/ratings', function (req, res, next) {
 
 })
 
+app.get('/Detailed/:object_id', function (req, res) {
+  const reviews = getConfig();
+    let reduced = reviews.find(function(element) {
+       return element.id === req.params.object_id;
+    });
+ 
+  res.send(reduced);
+})
+
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
 })
