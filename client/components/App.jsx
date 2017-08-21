@@ -76,7 +76,7 @@ clearFilter(event) {
         repo: this.state.repoStatic,
         dropdownShow: '',
         filterLabel: '',
-        filtered: false
+        filteredArr: []
     });
 }
 
