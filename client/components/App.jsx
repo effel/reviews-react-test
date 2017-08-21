@@ -26,7 +26,8 @@ class App extends React.Component {
         dropdownShow: '',
         filterArr: [],
         filterLabel: '',
-        sortingUp: false
+        sortingUp: false,
+        filteredArr: []
     };
     this.handlePaging = this.handlePaging.bind(this);
     this.filteringItems = this.filteringItems.bind(this);
@@ -37,10 +38,12 @@ class App extends React.Component {
 
 
 handlePaging(event) {
+
     let targetText = parseInt(event.target.innerHTML) - 1;
-    let something = pagination(targetText * itemPagedNumber, (targetText * itemPagedNumber + itemPagedNumber), this.state.repoStatic);
+    let slicedArr = this.state.filteredArr.length === 0 ? this.state.repoStatic : this.state.filteredArr ;
+    let pageContent = pagination(targetText * itemPagedNumber, (targetText * itemPagedNumber + itemPagedNumber), slicedArr);
     this.setState({
-        repo: something
+        repo: pageContent
     });
 }
 
@@ -62,7 +65,8 @@ filteringItems(event) {
     this.setState({
         repo: filterArray(this.state.repoStatic, targetText, 'traveledWith'),
         dropdownShow: '',
-        filterLabel: targetText
+        filterLabel: targetText,
+        filteredArr: filterArray(this.state.repoStatic, targetText, 'traveledWith')
     });
 
 }
@@ -71,7 +75,8 @@ clearFilter(event) {
     this.setState({
         repo: this.state.repoStatic,
         dropdownShow: '',
-        filterLabel: ''
+        filterLabel: '',
+        filtered: false
     });
 }
 
@@ -150,7 +155,8 @@ componentDidMount() {
         </div>   
      );  
      
-     const pagingNum = Math.ceil(this.state.repoStatic.length/itemPagedNumber);
+     const mainArr = this.state.filteredArr.length === 0 ? this.state.repoStatic : this.state.filteredArr;
+     const pagingNum = Math.ceil(mainArr.length/itemPagedNumber);
 
      const pagingButtons =  [...Array(pagingNum).keys()].map((button, index ) => 
        <button key={index} type="button" className="btn btn-default btn-sm"  onClick={this.handlePaging}>{index + 1}</button>  
