@@ -107,8 +107,11 @@ app.get('/Detailed/:object_id', function (req, res) {
     let reduced = reviews.find(function(element) {
        return element.id === req.params.object_id;
     });
- 
-  res.send(reduced);
+    
+    let getItemData = [];
+    getItemData.push({user:reduced.user, traveledWith:reduced.traveledWith, genRating:reduced.ratings.general.general, title : reduced.titles.nl, texts : reduced.texts.nl});
+  
+    res.send(getItemData);
 })
 
 app.listen(3000, function () {

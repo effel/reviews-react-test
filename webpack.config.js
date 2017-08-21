@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './client/index.js',
+  entry:  ["babel-polyfill", "./client/index.js"],
   output: {
     path: path.resolve('dist'),
     filename: 'index_bundle.js'

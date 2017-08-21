@@ -23,6 +23,7 @@
     "webpack": "^3.0.0"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "cors": "^2.8.4",
     "dateformat": "^2.0.0",
     "html-webpack-plugin": "^2.29.0",
